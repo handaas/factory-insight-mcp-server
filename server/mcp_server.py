@@ -60,12 +60,12 @@ def call_api(product_id: str, params: dict) -> dict:
     url = f'https://console.handaas.com/api/v1/integrator/call_api/{INTEGRATOR_ID}'
     try:
         response = requests.post(url, data=call_params)
-        return response.json().get("data", "查询为空")
+        return response.json().get("data", None) or response.json().get("msgCN", None)
     except Exception as e:
         return "查询失败"
     
 @mcp.tool()
-def factory_insight_fuzzy_search(matchKeyword: str, pageIndex: int = None, pageSize: int = None) -> dict:
+def factory_insight_fuzzy_search(matchKeyword: str, pageIndex: int = 1, pageSize: int = None) -> dict:
     """
     该接口的功能是根据提供的企业名称、人名、品牌、产品、岗位等关键词模糊查询相关企业列表。返回匹配的企业列表及其详细信息，用于查找和识别特定的企业信息。
 
@@ -197,18 +197,18 @@ def factory_insight_factory_capabilities(matchKeyword: str, keywordType: str = N
 
 
 @mcp.tool()
-def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageIndex: int = None, pageSize: int = None,
-                   address: str = None) -> dict:
+def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageIndex: int = 1, pageSize: int = 10,
+                   address: list = []) -> dict:
     """
-    该接口的功能是根据用户输入的条件（如工厂名称、主营产品、产品名称以及地理位置）搜索符合条件的工厂信息，并返回包括企业基本信息和统计总数的结果列表。该接口可能用于企业采购部门筛选供应商、市场调研机构搜集数据、或者政府相关部门进行经济数据分析等场景，帮助用户快速找到并评估潜在的合作工厂或市场竞争者。
+    该接口的功能是根据用户输入的条件（如工厂名称、主营产品、产品名称以及地理位置关键词）搜索符合条件的工厂信息，并返回包括企业基本信息和统计总数的结果列表。该接口可能用于企业采购部门筛选供应商、市场调研机构搜集数据、或者政府相关部门进行经济数据分析等场景，帮助用户快速找到并评估潜在的合作工厂或市场竞争者。
 
 
     请求参数:
     - pageIndex: 页码 类型：int - 从1开始
     - pageSize: 分页大小 类型：int - 一页最多获取10条
-    - matchKeyword: 匹配关键词 类型：string - 工厂名称/主营产品/产品名称
-    - address: 地区 类型：list of list - 参考如下格式：\[\["广东省","中山市"\],\["广东省","潮州市"\]\]
-    - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称）
+    - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string - 必填项
+    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]]
+    - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称） 必填项
 
     返回参数:
     - resultList: 列表结果 类型：list of dict
@@ -224,7 +224,7 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
         'pageIndex': pageIndex,
         'pageSize': pageSize,
         'matchKeyword': matchKeyword,
-        'address': address,
+        'address': json.dumps(address, ensure_ascii=False) if isinstance(address, list) else address,
         'keywordType': keywordType,
     }
 
