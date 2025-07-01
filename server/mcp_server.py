@@ -80,20 +80,7 @@ def factory_insight_fuzzy_search(matchKeyword: str, pageIndex: int = 1, pageSize
     - resultList: 结果列表 类型：list of dict
     - annualTurnover: 年营业额 类型：string
     - formerNames: 曾用名 类型：list of string
-    - catchReason: 命中原因 类型：dict
     - address: 注册地址 类型：string
-    - holderList: 股东 类型：list of string
-    - address: 地址 类型：list of string
-    - name: 企业名称 类型：list of string
-    - goodsNameList: 产品名称 类型：list of string
-    - operBrandList: 品牌 类型：list of string
-    - mobileList: 手机 类型：list of string
-    - phoneList: 固话 类型：list of string
-    - recruitingName: 招聘岗位 类型：list of string
-    - emailList: 邮箱 类型：list of string
-    - patentNameList: 专利 类型：list of string
-    - certNameList: 资质证书 类型：list of string
-    - socialCreditCode: 统一社会信用代码 类型：list of string
     - foundTime: 成立时间 类型：string
     - enterpriseType: 企业主体类型 类型：string
     - legalRepresentative: 法定代表人 类型：string
@@ -106,6 +93,22 @@ def factory_insight_fuzzy_search(matchKeyword: str, pageIndex: int = 1, pageSize
     - regCapitalCoinType: 注册资本币种 类型：string
     - regCapitalValue: 注册资本金额 类型：int
     - name: 企业名称 类型：string
+    - catchReason: 命中原因 类型：dict
+    - catchReason.name: 企业名称 类型：list of string
+    - catchReason.formerNames: 曾用名 类型：list of string
+    - catchReason.holderList: 股东 类型：list of string
+    - catchReason.recruitingName: 招聘岗位 类型：list of string
+    - catchReason.address: 地址 类型：list of string
+    - catchReason.operBrandList: 品牌 类型：list of string
+    - catchReason.goodsNameList: 产品名称 类型：list of string
+    - catchReason.phoneList: 固话 类型：list of string
+    - catchReason.emailList: 邮箱 类型：list of string
+    - catchReason.mobileList: 手机 类型：list of string
+    - catchReason.patentNameList: 专利 类型：list of string
+    - catchReason.certNameList: 资质证书 类型：list of string
+    - catchReason.prmtKeys: 推广关键词 类型：list of string
+    - catchReason.socialCreditCode: 统一社会信用代码 类型：list of string
+
     """
     # 构建请求参数
     params = {
@@ -200,15 +203,15 @@ def factory_insight_factory_capabilities(matchKeyword: str, keywordType: str = N
 def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageIndex: int = 1, pageSize: int = 10,
                    address: list = []) -> dict:
     """
-    该接口的功能是根据用户输入的条件（如工厂名称、主营产品、产品名称以及地理位置关键词）搜索符合条件的工厂信息，并返回包括企业基本信息和统计总数的结果列表。该接口可能用于企业采购部门筛选供应商、市场调研机构搜集数据、或者政府相关部门进行经济数据分析等场景，帮助用户快速找到并评估潜在的合作工厂或市场竞争者。
+    该接口的功能是根据用户输入的条件（如工厂名称、主营产品、产品名称以及地理位置关键词）搜索符合条件的工厂信息(注意：该接口地区是必填项)，并返回包括企业基本信息和统计总数的结果列表。该接口可能用于企业采购部门筛选供应商、市场调研机构搜集数据、或者政府相关部门进行经济数据分析等场景，帮助用户快速找到并评估潜在的合作工厂或市场竞争者。
 
 
     请求参数:
     - pageIndex: 页码 类型：int - 从1开始
     - pageSize: 分页大小 类型：int - 一页最多获取10条
-    - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string - 必填项
-    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]]
-    - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称） 必填项
+    - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string
+    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]] 必填项
+    - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称
 
     返回参数:
     - resultList: 列表结果 类型：list of dict
@@ -219,6 +222,9 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
     - total: 总数 类型：int - 最大显示100001
     - nameId: 企业id 类型：string
     """
+    if not isinstance(address, list):
+        return {"error": "地址参数格式错误"}
+    
     # 构建请求参数
     params = {
         'pageIndex': pageIndex,
