@@ -209,8 +209,8 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
     请求参数:
     - pageIndex: 页码 类型：int - 从1开始
     - pageSize: 分页大小 类型：int - 一页最多获取10条
-    - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string
-    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]] 必填项
+    - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string - 必填项
+    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]] - 必填项
     - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称
 
     返回参数:
