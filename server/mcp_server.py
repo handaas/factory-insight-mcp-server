@@ -77,7 +77,6 @@ def factory_insight_fuzzy_search(matchKeyword: str, pageIndex: int = 1, pageSize
 
     返回参数:
     - total: 总数 类型：int
-    - resultList: 结果列表 类型：list of dict
     - annualTurnover: 年营业额 类型：string
     - formerNames: 曾用名 类型：list of string
     - address: 注册地址 类型：string
@@ -214,7 +213,6 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
     - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称
 
     返回参数:
-    - resultList: 列表结果 类型：list of dict
     - foundTime: 成立日期 类型：string
     - name: 企业名称 类型：string
     - mainProducts: 主营产品 类型：list of string
