@@ -222,9 +222,6 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
     - total: 总数 类型：int - 最大显示100001
     - nameId: 企业id 类型：string
     """
-    if not isinstance(address, list):
-        return {"error": "地址参数格式错误"}
-    
     # 构建请求参数
     params = {
         'pageIndex': pageIndex,
