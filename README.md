@@ -208,7 +208,7 @@ python server/mcp_server.py streamable-http
 - `keywordType` (必需): 主体类型 - 综合搜索/工厂名称/主营产品/产品名称
 - `pageIndex` (可选): 页码 - 从1开始
 - `pageSize` (可选): 分页大小 - 一页最多获取10条
-- `address` (可选): 地区 - 格式：[["省份","市"],["省份","市"]]
+- `address` (必需): 地区 - 格式：[["省份","市"],["省份","市"]]
 
 **返回值**:
 - `total`: 总数 - 最大显示100001
