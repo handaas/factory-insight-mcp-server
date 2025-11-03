@@ -214,7 +214,7 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
     - pageIndex: 页码 类型：int - 默认从1开始
     - pageSize: 分页大小 类型：int - 一页最多获取10条, 不能超过10, 超过10的统一用10代替
     - matchKeyword: 工厂名称、主营产品、产品名称以及地理位置关键词 类型：string - 必填项
-    - address: 地区 类型：string - 多选，支持省份/城市/区县，输入格式举例："["福建省",["贵州省","安顺市","平坝县"]]"，查询国家发布政策则输入："[["国家部委"]]", 四个直辖市为："[["北京"]]"、"[["上海"]]"、"[["天津"]]"、"[["重庆"]]"
+    - address: 地区 类型：list of list - 参考如下格式：[["广东省","中山市"],["广东省","潮州市"]] - 必填项，注意此处是双层列表，每个子列表表示一个地区，可以是省份或者省市。
     - keywordType: 主体类型 类型：select - 主体类型枚举值（综合搜索，工厂名称，主营产品，产品名称
 
     返回参数:
@@ -225,13 +225,20 @@ def factory_insight_factory_search(matchKeyword: str, keywordType: str, pageInde
         - regCapital: 注册资本 类型：dict
         - nameId: 企业id 类型：string
     - total: 总数 类型：int - 最大显示100001
+    - nameId: 企业id 类型：string
     """
+    # 处理address参数，将其转换为JSON字符串，以满足API要求
+    if address and isinstance(address, list):
+        if not isinstance(address[0], list):
+            raise ValueError('address参数格式错误，应为双层列表，每个子列表表示一个地区,可以是省份或者省市，参考[["广东省"],["广东省","潮州市"]]')
+        address = json.dumps(address, ensure_ascii=False)
+    
     # 构建请求参数
     params = {
         'pageIndex': pageIndex,
         'pageSize': pageSize,
         'matchKeyword': matchKeyword,
-        'address': json.dumps(address, ensure_ascii=False) if isinstance(address, list) else address,
+        'address': address,
         'keywordType': keywordType,
     }
 
